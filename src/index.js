@@ -5,11 +5,15 @@
 
 // import modules
 const Firefox = require('selenium-webdriver/firefox')
-const { Builder, By, Key, until } = require('selenium-webdriver');
+const { Builder, By, Key, until } = require('selenium-webdriver')
+const random = require('random')
+
+const { accounts } = require('./config/accounts.json')
+const messages = require('./config/messages.json');
 
 (async function main() {
 
-  let webDriver = new Builder()
+  const webDriver = new Builder()
     .forBrowser('firefox')
     .setFirefoxOptions(new Firefox.Options().headless())
     .build()
@@ -24,16 +28,16 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
   const repType = repArguments[1]
 
   // give custom reputation reason (second variable)
-  const giveReason = repArguments[2] === true ? true : false
+  const giveReason = repArguments[2] == true ? true : false
 
   // open main unknowncheats page
   await webDriver.get('https://www.unknowncheats.me/forum/index.php')
 
   // username
-  await webDriver.findElement(By.id('navbar_username')).sendKeys('username_here')
+  await webDriver.findElement(By.id('navbar_username')).sendKeys('username')
 
   // password
-  await webDriver.findElement(By.id('Password1')).sendKeys('password_here', Key.RETURN)
+  await webDriver.findElement(By.id('Password1')).sendKeys('password', Key.RETURN)
 
   // check if the account was logged in
   await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/login.php'))
@@ -48,7 +52,7 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 
     return
   } catch (e) {
-    
+
     // debug purposeso only
     console.log('[UC-REP] - account logged in.')
   }
@@ -56,16 +60,18 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
   // open post to give reputation
   await webDriver.get('https://www.unknowncheats.me/forum/' + postID + '-post.html')
 
+  // wait to load all elements
+  await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/' + postID + '-post.html'))
+
   try {
 
     // check if the post id is valid
     await webDriver.findElement(By.xpath('//*[contains(text(), "Invalid Post specified")]'))
-    
+
     // debug purposes only
     console.log('[UC-REP] - invalid post id')
 
     return
-    
   } catch (e) {
 
     // debug purposes only
@@ -73,8 +79,12 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
 
   }
 
+  let message = ''
+
   // check which type of rep we're going to add
   if (repType === 'positive') {
+
+    message = messages.pos_reason[random.int(0, messages.pos_reason.length)]
 
     // debug purposes only
     console.log('[UC-REP] - giving positive rep.')
@@ -84,6 +94,8 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
   }
   else if (repType === 'negative') {
 
+    message = messages.neg_reason[random.int(0, messages.neg_reason.length)]
+
     // debug purposes only
     console.log('[UC-REP] - giving negative rep.')
 
@@ -91,42 +103,37 @@ const { Builder, By, Key, until } = require('selenium-webdriver');
     await webDriver.findElement(By.id('reputation_' + postID + '-neg')).click()
   }
 
-  // wait for the reputation box to open
-  setTimeout(async () => {
+  try {
 
     // check for modal alerts
-    const isRepGiven = await webDriver.wait(until.alertIsPresent()) 
-    
-    // if the user already gave rep to this post
-    if (isRepGiven) {
+    await webDriver.wait(until.alertIsPresent(), 1000)
 
-      // debug purposes only
-      return console.log('[UC-REP] - reputation already given to that user')
-    }
+    // debug purposes only
+    console.log('[UC-REP] - reputation already given to that user')
 
-    // check arguments
-    if (giveReason) {
+    return
+  } catch (e) { }
 
-      // write a random reputation reason 
-      await webDriver.findElement(By.id('reason_' + postID)).sendKeys('nice')
+  // check arguments
+  if (giveReason) {
+    // write a random reputation reason 
+    await webDriver.findElement(By.id('reason_' + postID)).sendKeys(message)
 
-      // debug purposes only
-      console.log('[UC-REP] - wrote reputation reason.')
-    }
-    else {
+    // debug purposes only
+    console.log('[UC-REP] - wrote reputation reason.')
+  }
+  else {
 
-      // debug purposes only
-      console.log('[UC-REP] - we are going without a reputation reason.')
-    }
+    // debug purposes only
+    console.log('[UC-REP] - we are going without a reputation reason.')
+  }
 
-    // give the post reputation
-    await webDriver.findElement(By.id('reputationsubmit_' + postID)).click()
+  // give the post reputation
+  await webDriver.findElement(By.id('reputationsubmit_' + postID)).click()
 
-    // debug purposeso only
-    console.log('[UC-REP] - rep given.')
+  // debug purposeso only
+  console.log('[UC-REP] - rep given.')
 
-    // todo: repeat the process with other account 
+  // todo: repeat the process with other account 
 
-  }, 1000)
-
-})();
+})()

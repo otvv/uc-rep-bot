@@ -10,6 +10,7 @@
   "license": "MIT",
   "dependencies": {
     "cheerio": "^1.0.0-rc.3",
+    "random": "^2.2.0",
     "selenium-webdriver": "^4.0.0-alpha.7"
   }
 }

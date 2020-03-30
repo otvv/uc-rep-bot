@@ -2,4 +2,3 @@ package-lock.json
 .vscode/
 node_modules/
 src/config/accounts.json
-src/config/messages.json
