@@ -3,13 +3,15 @@
 // by: otvv and danielsrbastos
 // license: MIT
 
-// import modules
-const Firefox = require('selenium-webdriver/firefox')
+// modules
 const { Builder, By, Key, until } = require('selenium-webdriver')
-const random = require('random')
+const Firefox = require('selenium-webdriver/firefox')
+const Random = require('random')
+const colorPrint = require('colorprint')
 
-const { accounts } = require('./config/accounts.json')
-const messages = require('./config/messages.json');
+// external configs
+const accountsJSON = require('./config/accounts.json');
+const messagesJSON = require('./config/messages.json');
 
 (async function main() {
 
@@ -30,110 +32,128 @@ const messages = require('./config/messages.json');
   // give custom reputation reason (second variable)
   const giveReason = repArguments[2] == true ? true : false
 
+  // debug purposes only
+  colorPrint.trace('[UC-REP] - opening main page')
+
   // open main unknowncheats page
   await webDriver.get('https://www.unknowncheats.me/forum/index.php')
 
-  // username
-  await webDriver.findElement(By.id('navbar_username')).sendKeys('username')
+  // check if the main poge is loaded
+  const isMainPageLoaded = await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/index.php'))
 
-  // password
-  await webDriver.findElement(By.id('Password1')).sendKeys('password', Key.RETURN)
-
-  // check if the account was logged in
-  await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/login.php'))
-
-  try {
-
-    // check if the username is correct before proceeding
-    await webDriver.findElement(By.xpath('//*[contains(text(), "invalid username or password")]'))
+  if (isMainPageLoaded) {
 
     // debug purposes only
-    console.log('[UC-REP] - invalid account credentials')
+    colorPrint.trace('[UC-REP] - main page opened')
 
-    return
-  } catch (e) {
+    // debug purposes only
+    colorPrint.trace('[UC-REP] - attempting to log in')
+
+    // username
+    await webDriver.findElement(By.id('navbar_username')).sendKeys('username_here')
+
+    // password
+    await webDriver.findElement(By.id('Password1')).sendKeys('password_here', Key.RETURN)
+
+    // check if the account was logged in
+    await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/login.php'))
+
+    try {
+
+      // check if the username is correct before proceeding
+      await webDriver.findElement(By.xpath('//*[contains(text(), "invalid username or password")]'))
+
+      // debug purposes only
+      colorPrint.fatal('[UC-REP] - invalid account credentials')
+
+      // exit
+      webDriver.quit();
+    } catch (e) { }
 
     // debug purposeso only
-    console.log('[UC-REP] - account logged in.')
+    colorPrint.trace('[UC-REP] - account logged in')
+
+    // open post to give reputation
+    await webDriver.get('https://www.unknowncheats.me/forum/' + postID + '-post.html')
+
+    // wait for it to load all elements
+    await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/' + postID + '-post.html'))
+
+    try {
+
+      // check if the post id is valid
+      await webDriver.findElement(By.xpath('//*[contains(text(), "Invalid Post specified")]'))
+
+      // debug purposes only
+      colorPrint.fatal('[UC-REP] - unknown post id')
+
+      // exit
+      webDriver.quit();
+    } catch (e) { }
+
+    // debug purposes only
+    colorPrint.trace('[UC-REP] - found post id: ' + postID)
+
+    // store random reputation messages
+    let message = ''
+
+    // check which type of rep we're going to add
+    if (repType === 'positive') {
+
+      message = messagesJSON.Positive[Random.int(0, messagesJSON.Positive.length)] // TODO: fix potential crash
+
+      // debug purposes only
+      colorPrint.info('[UC-REP] - giving positive rep')
+
+      // open reputation box
+      await webDriver.findElement(By.id('reputation_' + postID + '-pos')).click()
+    }
+
+    else if (repType === 'negative') {
+
+      message = messagesJSON.Negative[Random.int(0, messagesJSON.Negative.length)] // TODO: fix potential crash
+
+      // debug purposes only
+      colorPrint.error('[UC-REP] - giving negative rep')
+
+      // open reputation box
+      await webDriver.findElement(By.id('reputation_' + postID + '-neg')).click()
+    }
+
+    setTimeout(async () => {
+
+      if (giveReason) {
+
+        // write a random reputation reason 
+        await webDriver.findElement(By.id('reason_' + postID)).sendKeys(message)
+
+        // debug purposes only
+        colorPrint.trace('[UC-REP] - giving reputation reason: ' + message)
+      } else {
+
+        // debug purposes only
+        colorPrint.trace('[UC-REP] - no reputation reason specified')
+      }
+
+      // check if the reputation box is opened
+      const isRepBoxOpened = await webDriver.findElement(By.xpath('//*[contains(text(), "Reputation")]'))
+
+      // only continue if the reputation box is opened
+      if (isRepBoxOpened) {
+
+        // give the post reputation
+        await webDriver.findElement(By.id('reputationsubmit_' + postID)).click()
+      }
+      
+      // debug purposeso only
+      colorPrint.notice('[UC-REP] - finished')
+
+      // exit
+      webDriver.quit();
+
+    }, 1000)
   }
 
-  // open post to give reputation
-  await webDriver.get('https://www.unknowncheats.me/forum/' + postID + '-post.html')
-
-  // wait to load all elements
-  await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/' + postID + '-post.html'))
-
-  try {
-
-    // check if the post id is valid
-    await webDriver.findElement(By.xpath('//*[contains(text(), "Invalid Post specified")]'))
-
-    // debug purposes only
-    console.log('[UC-REP] - invalid post id')
-
-    return
-  } catch (e) {
-
-    // debug purposes only
-    console.log('[UC-REP] - found post id: ' + postID)
-
-  }
-
-  let message = ''
-
-  // check which type of rep we're going to add
-  if (repType === 'positive') {
-
-    message = messages.pos_reason[random.int(0, messages.pos_reason.length)]
-
-    // debug purposes only
-    console.log('[UC-REP] - giving positive rep.')
-
-    // open reputation box
-    await webDriver.findElement(By.id('reputation_' + postID + '-pos')).click()
-  }
-  else if (repType === 'negative') {
-
-    message = messages.neg_reason[random.int(0, messages.neg_reason.length)]
-
-    // debug purposes only
-    console.log('[UC-REP] - giving negative rep.')
-
-    // open reputation box
-    await webDriver.findElement(By.id('reputation_' + postID + '-neg')).click()
-  }
-
-  try {
-
-    // check for modal alerts
-    await webDriver.wait(until.alertIsPresent(), 1000)
-
-    // debug purposes only
-    console.log('[UC-REP] - reputation already given to that user')
-
-    return
-  } catch (e) { }
-
-  // check arguments
-  if (giveReason) {
-    // write a random reputation reason 
-    await webDriver.findElement(By.id('reason_' + postID)).sendKeys(message)
-
-    // debug purposes only
-    console.log('[UC-REP] - wrote reputation reason.')
-  }
-  else {
-
-    // debug purposes only
-    console.log('[UC-REP] - we are going without a reputation reason.')
-  }
-
-  // give the post reputation
-  await webDriver.findElement(By.id('reputationsubmit_' + postID)).click()
-
-  // debug purposeso only
-  console.log('[UC-REP] - rep given.')
-
-  // todo: repeat the process with other account 
+  // TODO: repeat the process with another account
 
 })()
