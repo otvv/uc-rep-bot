@@ -32,45 +32,51 @@ const messagesJSON = require('./config/messages.json');
   // give custom reputation reason (second variable)
   const giveReason = repArguments[2] == true ? true : false
 
-  // debug purposes only
   colorPrint.trace('[UC-REP] - opening main page')
 
   // open main unknowncheats page
   await webDriver.get('https://www.unknowncheats.me/forum/index.php')
+
+  // check for cloudflare captcha
+  const isCloudFlare = await webDriver.wait(until.titleIs('Attention Required! | Cloudflare'))
+    
+  if (isCloudFlare) {
+
+    colorPrint.fatal('[UC-REP] - cloud flare captcha detected. Please try again.')
+      
+    // exit
+    webDriver.quit();
+  }
 
   // check if the main poge is loaded
   const isMainPageLoaded = await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/index.php'))
 
   if (isMainPageLoaded) {
 
-    // debug purposes only
     colorPrint.trace('[UC-REP] - main page opened')
-
-    // debug purposes only
-    colorPrint.trace('[UC-REP] - attempting to log in')
-
+    
     // username
     await webDriver.findElement(By.id('navbar_username')).sendKeys('username_here')
-
+    
     // password
     await webDriver.findElement(By.id('Password1')).sendKeys('password_here', Key.RETURN)
+    
+    colorPrint.trace('[UC-REP] - attempting to log in')
 
     // check if the account was logged in
     await webDriver.wait(until.urlIs('https://www.unknowncheats.me/forum/login.php'))
 
     try {
-
+ 
       // check if the username is correct before proceeding
       await webDriver.findElement(By.xpath('//*[contains(text(), "invalid username or password")]'))
 
-      // debug purposes only
       colorPrint.fatal('[UC-REP] - invalid account credentials')
 
       // exit
       webDriver.quit();
     } catch (e) { }
 
-    // debug purposeso only
     colorPrint.trace('[UC-REP] - account logged in')
 
     // open post to give reputation
@@ -84,14 +90,12 @@ const messagesJSON = require('./config/messages.json');
       // check if the post id is valid
       await webDriver.findElement(By.xpath('//*[contains(text(), "Invalid Post specified")]'))
 
-      // debug purposes only
       colorPrint.fatal('[UC-REP] - unknown post id')
 
       // exit
       webDriver.quit();
     } catch (e) { }
 
-    // debug purposes only
     colorPrint.trace('[UC-REP] - found post id: ' + postID)
 
     // store random reputation messages
@@ -102,7 +106,6 @@ const messagesJSON = require('./config/messages.json');
 
       message = messagesJSON.Positive[Random.int(0, messagesJSON.Positive.length)] // TODO: fix potential crash
 
-      // debug purposes only
       colorPrint.info('[UC-REP] - giving positive rep')
 
       // open reputation box
@@ -113,7 +116,6 @@ const messagesJSON = require('./config/messages.json');
 
       message = messagesJSON.Negative[Random.int(0, messagesJSON.Negative.length)] // TODO: fix potential crash
 
-      // debug purposes only
       colorPrint.error('[UC-REP] - giving negative rep')
 
       // open reputation box
@@ -127,11 +129,9 @@ const messagesJSON = require('./config/messages.json');
         // write a random reputation reason 
         await webDriver.findElement(By.id('reason_' + postID)).sendKeys(message)
 
-        // debug purposes only
         colorPrint.trace('[UC-REP] - giving reputation reason: ' + message)
       } else {
 
-        // debug purposes only
         colorPrint.trace('[UC-REP] - no reputation reason specified')
       }
 
@@ -145,7 +145,6 @@ const messagesJSON = require('./config/messages.json');
         await webDriver.findElement(By.id('reputationsubmit_' + postID)).click()
       }
       
-      // debug purposeso only
       colorPrint.notice('[UC-REP] - finished')
 
       // exit

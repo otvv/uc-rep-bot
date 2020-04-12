@@ -1,11 +1,13 @@
 {
   "Positive": [
     "informative post",
-    "nice avatar"
+    "nice profile pic"
   ],
 
   "Negative": [
     "false information",
-    "what the fuck is this"
+    "what the fuck is this",
+    "uninteligent response",
+    "uninteligent"
   ]
 }
