@@ -1,14 +1,13 @@
 {
-  "Accounts": {
-
-    "username": [
-      "username_1",
-      "username_2"
-    ],
-    
-    "password": [
-      "password_1",
-      "password_2"
-    ]
-  }
+  "Username": [
+    "username_1",
+    "username_2",
+    "username_3"
+  ],
+  
+  "Password": [
+    "password_1",
+    "password_2",
+    "password_3"
+  ]
 }
