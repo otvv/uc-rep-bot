@@ -4,16 +4,16 @@
 // license: MIT
 
 // modules
-const { Builder, By, Key, until } = require("selenium-webdriver")
-const Firefox = require("selenium-webdriver/firefox")
-const Random = require("random")
-const colorPrint = require("colorprint")
+const Random = require("random");
+const colorPrint = require("colorprint");
+const Firefox = require("selenium-webdriver/firefox");
+const { Builder, By, Key, until } = require("selenium-webdriver");
 
 // external configs
 const accountsJSON = require("./config/accounts.json");
 const messagesJSON = require("./config/messages.json");
 
-(async function main() {
+(function main() {
 
   // handle environment variables
   const repArguments = process.argv.splice(2);
@@ -23,8 +23,8 @@ const messagesJSON = require("./config/messages.json");
 
   if (!postID) {
 
-    colorPrint.warn("[UC-REP] - you need to add a post id first")
-    return
+    colorPrint.warn("[UC-REP] - you need to add a post id first");
+    return;
   }
 
   // reputation type
@@ -32,8 +32,8 @@ const messagesJSON = require("./config/messages.json");
 
   if (!repType) {
 
-    colorPrint.warn("[UC-REP] - please type in the reputation type (positive/negative)")
-    return
+    colorPrint.warn("[UC-REP] - please type in the reputation type (positive/negative)");
+    return;
   }
 
   // this will keep the code running until we run out of accounts
@@ -62,14 +62,14 @@ const messagesJSON = require("./config/messages.json");
       // store account username & password here
       let { username, password } = "";
       
-      username = accountsJSON.Username[Random.int(0, accountsJSON.Username.length)] // FIXME: potential crash
-      password = accountsJSON.Password[Random.int(0, accountsJSON.Password.length)] // FIXME: potential crash
+      username = accountsJSON.Username[Random.int(0, accountsJSON.Username.length)]; // FIXME: potential crash
+      password = accountsJSON.Password[Random.int(0, accountsJSON.Password.length)]; // FIXME: potential crash
 
       // TODO: this check is kinda useless right now. The goal here is to make some sort of container to store the accounts and then 
       // somehow, delete them from the container once they"re used. After that, check if the container is empty and stop the bot
-      if (!username || !password) {
+      if (!username && !password) {
 
-        colorPrint.error("[UC-REP] - the bot has ran out of accounts");
+        colorPrint.fatal("[UC-REP] - the bot has ran out of accounts");
 
         // exit
         webDriver.quit();
@@ -118,7 +118,7 @@ const messagesJSON = require("./config/messages.json");
         // check which type of rep we"re going to add
         if (repType === "positive") {
 
-          message = messagesJSON.Positive[Random.int(0, messagesJSON.Positive.length)] // FIXME: potential crash
+          message = messagesJSON.Positive[Random.int(0, messagesJSON.Positive.length)]; // FIXME: potential crash
 
           colorPrint.info("[UC-REP] - giving positive rep");
 
@@ -126,7 +126,7 @@ const messagesJSON = require("./config/messages.json");
           await webDriver.findElement(By.id("reputation_" + postID + "-pos")).click();
         } else if (repType === "negative") {
 
-          message = messagesJSON.Negative[Random.int(0, messagesJSON.Negative.length)] // FIXME: potential crash
+          message = messagesJSON.Negative[Random.int(0, messagesJSON.Negative.length)]; // FIXME: potential crash
 
           colorPrint.error("[UC-REP] - giving negative rep");
 
@@ -157,13 +157,13 @@ const messagesJSON = require("./config/messages.json");
             await webDriver.findElement(By.id("reputationsubmit_" + postID)).click();
           }
 
-          colorPrint.notice("[UC-REP] - finished");
+          colorPrint.info("[UC-REP] - finished");
 
           // exit
           webDriver.quit();
 
-        }, 1000)
+        }, 1000);
       }
     }
   }
-})()
+})();
