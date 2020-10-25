@@ -17,6 +17,7 @@ A simple reputation bot for UnKnoWnCheaTs.me
 -   cloudflare checks
 -   wrong username/password check
 -   better account picker (it will rule out used accounts)
+-   discord integration
 
 :construction: _more to come.._
 
@@ -32,8 +33,21 @@ The usage is pretty straight-forward.
 
 Here's how:
 
-... on the _"uc-rep-bot"_ root folder, type: `node src/index.js`
+... on the _"uc-rep-bot"_ root folder, type: `node src/index.js post_id rep_type`
 
+_NOTE_: The third argument will be defaulted to true.
+
+<h5>example:</h5>
+
+```cpp
+node src/index.js 2568666 positive // this will give a positive rep and it will pick a random positive message from message.json file
+
+node src/index.js 2568666 positive false // this will give a positive rep without a reputation reason (message)
+
+node src/index.js 2568666 negative // this will give a negative rep and it will pick a random negative message from message.json file
+
+node src/index.js 2568666 negative false // this will give a negative rep without a reputation reason (message)
+```
 ***
 
 **uc-rep-bot** is available under the [MIT License](https://github.com/otvv/uc-rep-bot/blob/master/LICENSE)
