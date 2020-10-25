@@ -17,8 +17,7 @@ A simple reputation bot for [UnKnoWnCheaTs](https://www.unknowncheats.me).
 -   cloudflare checks
 -   wrong username/password check
 -   ~better account picker _(it will rule out used accounts)_ ~ :heavy_check_mark:
--   discord integration
--   
+-   discord integration 
 
 :construction: _more to come.._
 
@@ -36,7 +35,7 @@ _NOTE_: The third argument will always be `true`, unless you set it to `false`.
 
 <h5>example:</h5>
 
-```
+```js
 node ./index.js 2568666 positive // this will give a positive rep and it will pick a random positive message from message.json file
 node ./index.js 2568666 positive false // this will give a positive rep without a reputation reason (message)
 node ./index.js 2568666 negative // this will give a negative rep and it will pick a random negative message from message.json file
