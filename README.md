@@ -32,13 +32,9 @@ Since this is a Node application, you'll need `node`.
 
 <h4>usage:</h4>
 
-The usage is pretty straight-forward.
+On the _"uc-rep-bot/src"_ folder, open up a _terminal/cmd/powershell_ window and type: `node index.js post_id rep_type`
 
-Here's how:
-
-... on the _"uc-rep-bot"_ root folder, type: `node src/index.js post_id rep_type`
-
-_NOTE_: The third argument will be defaulted to true.
+_NOTE_: The third argument will always be _true_, unless you set it to _false_.
 
 <h5>example:</h5>
 
