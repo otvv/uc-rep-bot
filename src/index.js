@@ -134,26 +134,26 @@ const messagesJSON = require("./config/messages.json");
             break;
           }
         }
+
+        if (giveReason) {
+
+          // write a random reputation reason 
+          await webDriver.findElement(By.id("reason_" + postID)).sendKeys(message);
+
+          colorPrint.trace("[UC-REP] - giving reputation reason: " + message);
+        } else {
+
+          colorPrint.warn("[UC-REP] - no reputation reason specified");
+        }
+
+        // give rep
+        await webDriver.executeScript("arguments[0].click();", webDriver.findElement(By.id("reputationsubmit_" + postID)));
+
+        colorPrint.info("[UC-REP] - finished");
+
+        // exit
+        webDriver.quit();
       }
-
-      if (giveReason) {
-
-        // write a random reputation reason 
-        await webDriver.findElement(By.id("reason_" + postID)).sendKeys(message);
-
-        colorPrint.trace("[UC-REP] - giving reputation reason: " + message);
-      } else {
-
-        colorPrint.warn("[UC-REP] - no reputation reason specified");
-      }
-
-      // give rep
-      await webDriver.executeScript("arguments[0].click();", webDriver.findElement(By.id("reputationsubmit_" + postID)));
-
-      colorPrint.info("[UC-REP] - finished");
-
-      // exit
-      webDriver.quit();
     }
   }
 })();

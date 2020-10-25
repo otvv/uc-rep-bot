@@ -1,6 +1,6 @@
 {
   "name": "uc-rep-bot",
-  "version": "0.0.9",
+  "version": "0.0.9-1",
   "description": "reputation bot for unknowncheats.me",
   "main": "src/index.js",
   "author": "otvv & daan",
