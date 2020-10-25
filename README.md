@@ -1,5 +1,5 @@
 # uc-rep-bot [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1c5f2914a0464a8690abf686c998d053)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=otvv/uc-rep-bot&amp;utm_campaign=Badge_Grade)
-A simple reputation bot for UnKnoWnCheaTs.me
+A simple reputation bot for [UnKnoWnCheaTs](www.unknowncheats.me).
 
 ***
 
@@ -16,8 +16,9 @@ A simple reputation bot for UnKnoWnCheaTs.me
 
 -   cloudflare checks
 -   wrong username/password check
--   ~better account picker (it will rule out used accounts)~ :heavy_check_mark:
+-   ~better account picker _(it will rule out used accounts)_ ~ :heavy_check_mark:
 -   discord integration
+-   
 
 :construction: _more to come.._
 
