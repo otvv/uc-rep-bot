@@ -19,7 +19,7 @@ This could get your account banned. Use this at your own risk.
 
 -   cloudflare checks
 -   wrong username/password check
--   better account picker (it will rule out used accounts)
+-   ~better account picker (it will rule out used accounts)~ :heavy_check_mark:
 -   discord integration
 
 :construction: _more to come.._
@@ -39,13 +39,10 @@ _NOTE_: The third argument will always be _true_, unless you set it to _false_.
 <h5>example:</h5>
 
 ```cpp
-node src/index.js 2568666 positive // this will give a positive rep and it will pick a random positive message from message.json file
-
-node src/index.js 2568666 positive false // this will give a positive rep without a reputation reason (message)
-
-node src/index.js 2568666 negative // this will give a negative rep and it will pick a random negative message from message.json file
-
-node src/index.js 2568666 negative false // this will give a negative rep without a reputation reason (message)
+node ./index.js 2568666 positive // this will give a positive rep and it will pick a random positive message from message.json file
+node ./index.js 2568666 positive false // this will give a positive rep without a reputation reason (message)
+node ./index.js 2568666 negative // this will give a negative rep and it will pick a random negative message from message.json file
+node ./index.js 2568666 negative false // this will give a negative rep without a reputation reason (message)
 ```
 ***
 
