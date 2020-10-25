@@ -1,5 +1,5 @@
 # uc-rep-bot [![Codacy Badge](https://app.codacy.com/project/badge/Grade/1c5f2914a0464a8690abf686c998d053)](https://www.codacy.com?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=otvv/uc-rep-bot&amp;utm_campaign=Badge_Grade)
-A simple reputation bot for [UnKnoWnCheaTs](www.unknowncheats.me).
+A simple reputation bot for [UnKnoWnCheaTs](https://www.unknowncheats.me).
 
 ***
 
