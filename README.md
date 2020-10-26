@@ -16,7 +16,7 @@ A simple reputation bot for [UnKnoWnCheaTs](https://www.unknowncheats.me).
 
 -   cloudflare checks
 -   wrong username/password check
--   ~better account picker _(it will rule out used accounts)_ ~ :heavy_check_mark:
+-   ~better account picker _(it will rule out used accounts)_~ :heavy_check_mark:
 -   discord integration 
 
 :construction: _more to come.._
