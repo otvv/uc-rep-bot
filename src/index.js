@@ -62,8 +62,8 @@ const messagesJSON = require("./config/messages.json");
       // store account username & password here
       let username, password = "";
 
-      username = accountsJSON.Username[i];
-      password = accountsJSON.Password[i];
+      username = accountsJSON.Username[parseInt(i)];
+      password = accountsJSON.Password[parseInt(i)];
 
       // username
       await webDriver.findElement(By.id("navbar_username")).sendKeys(username);
