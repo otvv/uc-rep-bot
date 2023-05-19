@@ -1,4 +1,4 @@
-# uc-rep-bot [![Codacy Badge](https://app.codacy.com/project/badge/Grade/597283f938aa4f74b83f8b7dbf4e6146)](https://www.codacy.com/gh/otvv/uc-rep-bot/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=otvv/uc-rep-bot&amp;utm_campaign=Badge_Grade)
+# :robot: `uc-rep-bot`
 
 A simple reputation bot for [UnKnoWnCheaTs](https://www.unknowncheats.me).
 
@@ -17,6 +17,7 @@ A simple reputation bot for [UnKnoWnCheaTs](https://www.unknowncheats.me).
 
 -   cloudflare checks
 -   wrong username/password check
+-   being able to select a specific type of rep reason to give _(lets say that you want to give a negative rep to someone but want to use a positive rep reason message)_
 -   ~better account picker _(it will rule out accounts that were already used to give rep on the specified post)_~ :heavy_check_mark:
 -   discord integration (my plan for this is to eventually transform this into a discord bot)_
 
@@ -51,6 +52,9 @@ node ./index.js 2568666 negative false // this will give a negative rep without 
 This bot is not meant for mass usage. So be careful, this could get your account(s) banned.
 
 **Use this at your own risk.**
+
+## CONTRIBUTORS
+Big thanks to [@danielsrbastos](https://github.com/danielsrbastos) who helped me write this code way back in 2019 and test it as well.
 
 ***
 
